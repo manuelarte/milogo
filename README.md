@@ -6,8 +6,8 @@
 Rest Partial Response (aka Field Selection) Pattern middleware for [Gin](https://gin-gonic.com/). This gin plugin allows you to select a subset of fields to be returned from your endpoints.
 
 e.g. Imagine that you have the following rest endpoint that returns a product with the fields, code, price, description, manufacturedBy:
-```
 > /products/1
+```json
 {
  "code": "1",
  "price": "200",
@@ -16,11 +16,11 @@ e.g. Imagine that you have the following rest endpoint that returns a product wi
 }
 ```
 We can call the endpoint and pass with the query parameter fields, filter out the fields that we need:
-```
-> /products/1?fields=code,price
+> /products/1?**fields=code,price**
+```json
 {
  "code": "1",
- "price": "200",
+ "price": "200"
 }
 ```
 
@@ -37,16 +37,16 @@ r.Use(Milogo())
 ```
 
 - Call your endpoints adding the query parameter `fields` with the fields you want to filter:
-```
-/users/1?fields=name,surname
-```
+
+> /users/1?**fields=name,surname**
+
 
 ## ✨ Features
 
 - [Support for multiple fields filtering](./examples/simple). 
 
-```
 > /users/manuel?fields=name,surname
+```json
 {
  "name": "Manuel",
  "surname": "Example"
@@ -55,8 +55,8 @@ r.Use(Milogo())
 
 - [Support for arrays](./examples/simple-array)
 
-```
 > /users?fields=name
+```json
 [
   {
     "name": "Manuel"
@@ -66,8 +66,8 @@ r.Use(Milogo())
 
 - [Support for nested jsons](./examples/nested).
 
-```
 > /users/manuel?fields=name,surname,address(street,number)
+```json
 {
  "name": "Manuel",
  "surname": "Example",
@@ -79,8 +79,8 @@ r.Use(Milogo())
 ```
 
 - [Support for json wrapped](./examples/wrapped). 
-```
 > /users/manuel?fields=name
+```json
 {
  "data": {
     "name": "Manuel"
@@ -89,6 +89,7 @@ r.Use(Milogo())
 ```
 
 - [Middleware applied to route groups with different configuration](./example/routeGroups)
+
 Milogo middleware, as any other gin middleware, can be applied to different route groups with different configurations.
 
 ## 🤝 Contributing
