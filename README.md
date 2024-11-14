@@ -1,5 +1,6 @@
 [![Go](https://github.com/manuelarte/milogo/actions/workflows/go.yml/badge.svg)](https://github.com/manuelarte/milogo/actions/workflows/go.yml)
-Add coverage badge once merged to main
+![coverage](https://raw.githubusercontent.com/manuelarte/milogo/badges/.badges/main/coverage.svg)
+![version](https://img.shields.io/github/v/release/manuelarte/milogo)
 # Milogo
 Rest Partial Response (aka Field Selection) Pattern middleware for [Gin](https://gin-gonic.com/). This gin plugin allows you to select a subset of fields to be returned from your endpoints.
 e.g.
