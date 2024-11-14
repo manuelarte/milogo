@@ -40,7 +40,7 @@ r.Use(Milogo())
 
 ## ✨ Features
 
-- Support for multiple fields filtering. Check [example](./examples/simple)
+- [Support for multiple fields filtering](./examples/simple). 
 
 ```
 > /users/manuel?fields=name,surname
@@ -50,7 +50,7 @@ r.Use(Milogo())
 }
 ```
 
-- Support for arrays. Check [example](./examples/simple-array)
+- [Support for arrays](./examples/simple-array)
 
 ```
 > /users?fields=name
@@ -61,7 +61,7 @@ r.Use(Milogo())
 ]
 ```
 
-- Support for nested jsons. Check [example](./examples/nested)
+- [Support for nested jsons](./examples/nested). Check [example]
 
 ```
 > /users/manuel?fields=name,surname,address(street,number)
@@ -75,9 +75,14 @@ r.Use(Milogo())
 }
 ```
 
-- Support for json wrapped. Check [example](./examples/wrapped) 
+- [Support for json wrapped](./examples/wrapped). 
 ```
-TODO
+> /users/manuel?fields=name
+{
+ "data": {
+    "name": "Manuel"
+ }
+}
 ```
 
 ## 🤝 Contributing
