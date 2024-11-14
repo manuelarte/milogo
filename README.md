@@ -4,7 +4,7 @@
 ![version](https://img.shields.io/github/v/release/manuelarte/milogo)
 # Milogo
 Rest Partial Response (aka Field Selection) Pattern middleware for [Gin](https://gin-gonic.com/). This gin plugin allows you to select a subset of fields to be returned from your endpoints.
-e.g.
+e.g. Imagine that you have the following rest endpoint that returns a product with the fields, code, price, description, manufacturedBy:
 ```
 > /products/1
 {
@@ -14,6 +14,7 @@ e.g.
  "manufacturedBy": "company"
 }
 ```
+We can call the endpoint and pass with the query parameter fields, filter out the fields that we need:
 ```
 > /products/1?fields=code,price
 {
@@ -62,7 +63,7 @@ r.Use(Milogo())
 ]
 ```
 
-- [Support for nested jsons](./examples/nested). Check [example]
+- [Support for nested jsons](./examples/nested).
 
 ```
 > /users/manuel?fields=name,surname,address(street,number)
