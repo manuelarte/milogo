@@ -62,6 +62,7 @@ func Milogo(configOptions ...pkg.ConfigOption) gin.HandlerFunc {
 func isPartialResponseRequest(c *gin.Context, config pkg.Config) bool {
 	isJson := strings.Contains(c.Writer.Header().Get("Content-Type"), "application/json")
 	isFieldQuery := c.Query(config.QueryParamField) != ""
+	isNotBadStatus := c.Writer.Status() < 300 && c.Writer.Status() > 199
 
-	return isJson && isFieldQuery
+	return isJson && isFieldQuery && isNotBadStatus
 }

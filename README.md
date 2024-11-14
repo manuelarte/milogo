@@ -86,6 +86,9 @@ r.Use(Milogo())
 }
 ```
 
+- [Middleware applied to route groups with different configuration](./example/routeGroups)
+Milogo middleware, as any other gin middleware, can be applied to different route groups with different configurations.
+
 ## 🤝 Contributing
 
 Feel free to create a PR or suggest improvements or ideas.
