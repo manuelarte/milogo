@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/manuelarte/milogo"
+	"github.com/manuelarte/milogo/pkg"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -30,7 +32,8 @@ type RestResponse[T any] struct {
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-	r.Use()
+	wrapFieldOption, _ := pkg.WithWrapField("data")
+	r.Use(milogo.Milogo(wrapFieldOption))
 
 	// Get user value
 	r.GET("/users/:name", func(c *gin.Context) {

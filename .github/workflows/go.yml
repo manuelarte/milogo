@@ -36,6 +36,8 @@ jobs:
       uses: vladopajic/go-test-coverage@v2
       with:
         config: ./.testcoverage.yml
+        profile: cover.out
+        local-prefix: github.com/manuelarte/milogo
         ## when token is not specified (value '') this feature is turned off
         ## in this example badge is created and committed only for main branch
         git-token: ${{ github.ref_name == 'main' && secrets.GITHUB_TOKEN || '' }}
