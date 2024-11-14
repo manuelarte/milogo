@@ -15,7 +15,7 @@ e.g. Imagine that you have the following rest endpoint that returns a product wi
  "manufacturedBy": "company"
 }
 ```
-We can call the endpoint and pass with the query parameter fields, filter out the fields that we need:
+We can call the endpoint and, with the query parameter fields, filter out the fields that we are interested:
 > /products/1?**fields=code,price**
 ```json
 {
