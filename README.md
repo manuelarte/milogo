@@ -3,7 +3,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/manuelarte/milogo)](https://goreportcard.com/report/github.com/manuelarte/milogo)
 ![version](https://img.shields.io/github/v/release/manuelarte/milogo)
 # Milogo
-Rest Partial Response (aka Field Selection) Pattern middleware for [Gin](https://gin-gonic.com/). This gin plugin allows you to select a subset of fields to be returned from your endpoints.
+Rest Partial Response (aka Field Selection) Pattern middleware for [Gin](https://gin-gonic.com/). This gin middleware allows you to select a subset of fields to be returned from your endpoints.
 
 e.g. Imagine that you have the following rest endpoint that returns a product with the fields, code, price, description, manufacturedBy:
 > /products/1
