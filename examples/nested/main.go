@@ -57,7 +57,7 @@ func main() {
 		fmt.Printf("All the address fields:\n%s", w.Body.String())
 
 		w = httptest.NewRecorder()
-		req, _ = http.NewRequest("GET", "/users/manuel?fields=name,surname,address(name,zipcode)", nil)
+		req, _ = http.NewRequest("GET", "/users/manuel?fields=name,surname,address(number,zipcode)", nil)
 		r.ServeHTTP(w, req)
 		fmt.Printf("Some address fields:\n%s", w.Body.String())
 
