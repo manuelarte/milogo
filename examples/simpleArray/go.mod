@@ -1,4 +1,4 @@
-module simple-array
+module simpleArray
 
 go 1.23.2
 
