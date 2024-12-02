@@ -78,7 +78,7 @@ r.Use(Milogo())
 }
 ```
 
-- [Support for json wrapped](./examples/wrapped). 
+- [Support for wrapped json](./examples/wrapped). 
 > /users/manuel?fields=name
 ```json
 {
