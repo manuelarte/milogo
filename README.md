@@ -5,7 +5,7 @@
 # Milogo
 Rest Partial Response (aka Field Selection) Pattern middleware for [Gin](https://gin-gonic.com/). This gin middleware allows you to select a subset of fields to be returned from your endpoints.
 
-e.g. Imagine that you have the following rest endpoint that returns a product with the fields, code, price, description, manufacturedBy:
+e.g. Imagine that you have the following rest endpoint that returns a product with the fields, `code, price, description, manufacturedBy`:
 > /products/1
 ```json
 {
