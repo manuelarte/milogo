@@ -66,7 +66,7 @@ r.Use(Milogo())
 
 - [Support for nested jsons](./examples/nested).
 
-> /users/manuel?fields=name,surname,address(street,number)
+> /users/manuel?fields=name,surname,address(street,zipcode)
 ```json
 {
  "name": "Manuel",
