@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/manuelarte/milogo/pkg"
+	"strconv"
 	"strings"
 )
 
@@ -46,6 +47,7 @@ func Milogo(configOptions ...pkg.ConfigOption) gin.HandlerFunc {
 					if err == nil {
 						c.Writer = writer.ResponseWriter // Set back to original writer
 						_, _ = c.Writer.Write(modifiedBody)
+						c.Header("Content-Length", strconv.Itoa(len(modifiedBody)))
 
 						return
 					}

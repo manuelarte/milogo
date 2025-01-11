@@ -14,7 +14,13 @@ so then you only need to import the project one time and you can show how to use
 - If you put a "wrong" wrapper field then all the json is shown, when maybe we should use return the default behaviour
 - If you chose indented json, you lose the indentation
 
-## [0.0.1]
+## [v0.0.2] 2025-11-01
+
+- Updating Content-Length header when json is modified
+- Refactor examples to use one single go.mod
+- Updating dependencies
+
+## [v0.0.1]
 
 ### Added
 
