@@ -45,11 +45,11 @@ r.Use(Milogo())
 
 - [Support for multiple fields filtering](./examples/simple). 
 
-> /users/manuel?fields=name,surname
+> /users/1?fields=name,surname
 ```json
 {
- "name": "Manuel",
- "surname": "Example"
+ "name": "John",
+ "surname": "Doe"
 }
 ```
 
@@ -59,18 +59,18 @@ r.Use(Milogo())
 ```json
 [
   {
-    "name": "Manuel"
+    "name": "John"
   }
 ]
 ```
 
 - [Support for nested jsons](./examples/nested).
 
-> /users/manuel?fields=name,surname,address(street,zipcode)
+> /users/1?fields=name,surname,address(street,zipcode)
 ```json
 {
- "name": "Manuel",
- "surname": "Example",
+ "name": "John",
+ "surname": "Doe",
  "address": {
    "street": "mystreet",
    "zipcode": "myzipcode"
@@ -79,11 +79,11 @@ r.Use(Milogo())
 ```
 
 - [Support for wrapped json](./examples/wrapped). 
-> /users/manuel?fields=name
+> /users/1?fields=name
 ```json
 {
  "data": {
-    "name": "Manuel"
+    "name": "John"
  }
 }
 ```
