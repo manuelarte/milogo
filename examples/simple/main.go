@@ -25,7 +25,7 @@ func setupRouter() *gin.Engine {
 	r.GET("/users/:name", func(c *gin.Context) {
 		user := User{
 			Name:    c.Params.ByName("name"),
-			Surname: "Example",
+			Surname: "Doe",
 			Age:     1,
 		}
 		c.IndentedJSON(http.StatusOK, user)
@@ -40,7 +40,7 @@ func main() {
 	go func() {
 		time.Sleep(time.Second)
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/users/manuel?fields=name,surname", nil)
+		req, _ := http.NewRequest("GET", "/users/john?fields=name,surname", nil)
 		r.ServeHTTP(w, req)
 		fmt.Println(w.Body.String())
 		os.Exit(1)
