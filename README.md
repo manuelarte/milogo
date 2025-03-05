@@ -15,6 +15,8 @@ e.g. Imagine that you have the following rest endpoint that returns an user with
  "age": 18,
  "address": {
    "street": "mystreet",
+   "city": "mycity",
+   "country": "mycountry",
    "zipcode": "1111"
  }
 }
