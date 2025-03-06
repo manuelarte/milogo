@@ -33,25 +33,27 @@ func Milogo(configOptions ...pkg.ConfigOption) gin.HandlerFunc {
 		c.Next()
 
 		// If the content-type is JSON, modify the JSON body
-		if isPartialResponseRequest(c, config) {
-			var jsonBody interface{}
-			if err := json.Unmarshal(writer.body.Bytes(), &jsonBody); err == nil {
-				fields := c.Query(config.QueryParamField)
+		//nolint:nestif // Refactor later
+		if jsonBody, isPartialResponse := isPartialResponseRequest(c, config); isPartialResponse {
+			fields := c.Query(config.QueryParamField)
 
-				wrappedJSONData := jsonBody
-				if config.WrapperField != "" {
-					wrappedJSONData = jsonBody.(map[string]interface{})[config.WrapperField]
+			wrappedJSONData := jsonBody
+			if config.WrapperField != "" {
+				if wrappedField, isWrappedAJSON := jsonBody.(map[string]interface{}); isWrappedAJSON {
+					wrappedJSONData = wrappedField[config.WrapperField]
+				} else {
+					return
 				}
-				if partialResponseFields, errParsing := config.Parser.Parse(fields); errParsing == nil &&
-					pkg.Filter(wrappedJSONData, partialResponseFields) == nil {
-					modifiedBody, errMarsh := json.Marshal(jsonBody)
-					if errMarsh == nil {
-						c.Writer = writer.ResponseWriter // Set back to original writer
-						_, _ = c.Writer.Write(modifiedBody)
-						c.Header("Content-Length", strconv.Itoa(len(modifiedBody)))
+			}
+			if partialResponseFields, errParsing := config.Parser.Parse(fields); errParsing == nil &&
+				pkg.Filter(wrappedJSONData, partialResponseFields) == nil {
+				modifiedBody, errMarsh := json.Marshal(jsonBody)
+				if errMarsh == nil {
+					c.Writer = writer.ResponseWriter // Set back to original writer
+					_, _ = c.Writer.Write(modifiedBody)
+					c.Header("Content-Length", strconv.Itoa(len(modifiedBody)))
 
-						return
-					}
+					return
 				}
 			}
 		}
@@ -62,13 +64,21 @@ func Milogo(configOptions ...pkg.ConfigOption) gin.HandlerFunc {
 	}
 }
 
-func isPartialResponseRequest(c *gin.Context, config pkg.Config) bool {
+func isPartialResponseRequest(c *gin.Context, config pkg.Config) (interface{}, bool) {
 	is300 := 300
-	is199 := 1999
+	is199 := 199
 
 	isJSON := strings.Contains(c.Writer.Header().Get("Content-Type"), "application/json")
 	isFieldQuery := c.Query(config.QueryParamField) != ""
 	isNotBadStatus := c.Writer.Status() < is300 && c.Writer.Status() > is199
+	if isJSON && isFieldQuery && isNotBadStatus {
+		if customWriter, isCustomWriter := c.Writer.(*customResponseWriter); isCustomWriter {
+			var jsonBody interface{}
+			if err := json.Unmarshal(customWriter.body.Bytes(), &jsonBody); err == nil {
+				return jsonBody, true
+			}
+		}
+	}
 
-	return isJSON && isFieldQuery && isNotBadStatus
+	return nil, false
 }

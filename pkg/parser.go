@@ -42,6 +42,7 @@ func (p Parser) Parse(fields string) (JSONFieldObject, error) {
 	return toReturn, nil
 }
 
+//nolint:gocognit
 func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (JSONFieldObject, error) {
 	if chunk == "" {
 		return nil, ErrFieldIsEmpty

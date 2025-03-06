@@ -26,13 +26,13 @@ func setupRouter() *gin.Engine {
 	r.GET("/users", func(c *gin.Context) {
 		users := []*User{
 			{
-				Name:    "Manuel",
-				Surname: "Example",
+				Name:    "John",
+				Surname: "Doe",
 				Age:     99,
 			},
 			{
 				Name:    "Milo",
-				Surname: "Example",
+				Surname: "Doe",
 				Age:     99,
 			},
 		}

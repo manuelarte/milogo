@@ -18,8 +18,10 @@ func Filter(jsonData interface{}, partialResponseFields JSONFieldObject) error {
 	return ErrUnrecognizedFormat
 }
 
+//nolint:gocognit // Refactor later
 func filterMap(jsonData map[string]interface{}, partialResponseFields JSONFieldObject) error {
 	for key, value := range jsonData {
+		//nolint:nestif // Refactor later
 		if _, ok := partialResponseFields[key]; !ok {
 			delete(jsonData, key)
 		} else {
