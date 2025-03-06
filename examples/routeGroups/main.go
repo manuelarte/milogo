@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/manuelarte/milogo"
-	"github.com/manuelarte/milogo/pkg"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"time"
+
+	"github.com/manuelarte/milogo"
+	"github.com/manuelarte/milogo/pkg"
 
 	"github.com/gin-gonic/gin"
 )
