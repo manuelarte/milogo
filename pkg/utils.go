@@ -1,12 +1,12 @@
 package pkg
 
-func Filter(jsonData interface{}, partialResponseFields JsonFieldObject) error {
+func Filter(jsonData interface{}, partialResponseFields JSONFieldObject) error {
 	if casted, ok := jsonData.(map[string]interface{}); ok {
 		return filterMap(casted, partialResponseFields)
-	} else if array, ok := jsonData.([]interface{}); ok {
+	} else if array, okCast := jsonData.([]interface{}); okCast {
 		for _, item := range array {
-			if casted, ok := item.(map[string]interface{}); ok {
-				if err := filterMap(casted, partialResponseFields); err != nil {
+			if innerCasted, okMap := item.(map[string]interface{}); okMap {
+				if err := filterMap(innerCasted, partialResponseFields); err != nil {
 					return err
 				}
 			}
@@ -18,24 +18,25 @@ func Filter(jsonData interface{}, partialResponseFields JsonFieldObject) error {
 	return ErrUnrecognizedFormat
 }
 
-func filterMap(jsonData map[string]interface{}, partialResponseFields JsonFieldObject) error {
+//nolint:gocognit // Refactor later
+func filterMap(jsonData map[string]interface{}, partialResponseFields JSONFieldObject) error {
 	for key, value := range jsonData {
+		//nolint:nestif // Refactor later
 		if _, ok := partialResponseFields[key]; !ok {
 			delete(jsonData, key)
 		} else {
-			if values, ok := value.([]map[string]interface{}); ok {
+			if values, okCast := value.([]map[string]interface{}); okCast {
 				for _, value := range values {
-					if nestedPartialResponse, ok := partialResponseFields[key].(JsonFieldObject); ok {
+					if nestedPartialResponse, isFieldObject := partialResponseFields[key].(JSONFieldObject); isFieldObject {
 						return filterMap(value, nestedPartialResponse)
 					}
 				}
 			} else {
-				if casted, ok := partialResponseFields[key].(JsonFieldObject); ok {
-					if nestedObject, ok := value.(map[string]interface{}); ok {
+				if casted, isFieldObject := partialResponseFields[key].(JSONFieldObject); isFieldObject {
+					if nestedObject, isMap := value.(map[string]interface{}); isMap {
 						return filterMap(nestedObject, casted)
-					} else {
-						return NotAnObjectError(key)
 					}
+					return NotAnObjectError(key)
 				}
 			}
 		}

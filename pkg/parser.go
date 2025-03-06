@@ -4,15 +4,17 @@ const (
 	defaultFieldSeparator = ","
 )
 
-type JsonField interface{}
+type JSONField interface{}
 
-var _ JsonField = new(JsonFieldValue)
-var _ JsonField = new(JsonFieldObject)
+var (
+	_ JSONField = new(JSONFieldValue)
+	_ JSONField = new(JSONFieldObject)
+)
 
-// JsonFieldValue Holder that indicates that the field is just a value.
-type JsonFieldValue struct{}
+// JSONFieldValue Holder that indicates that the field is just a value.
+type JSONFieldValue struct{}
 
-type JsonFieldObject map[string]JsonField
+type JSONFieldObject map[string]JSONField
 
 func NewParser() Parser {
 	return Parser{
@@ -25,7 +27,7 @@ type Parser struct {
 }
 
 // Parse String to get what fields are present.
-func (p Parser) Parse(fields string) (JsonFieldObject, error) {
+func (p Parser) Parse(fields string) (JSONFieldObject, error) {
 	if fields == "" {
 		return nil, ErrFieldsIsEmpty
 	}
@@ -40,11 +42,12 @@ func (p Parser) Parse(fields string) (JsonFieldObject, error) {
 	return toReturn, nil
 }
 
-func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (JsonFieldObject, error) {
+//nolint:gocognit
+func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (JSONFieldObject, error) {
 	if chunk == "" {
 		return nil, ErrFieldIsEmpty
 	}
-	toReturn := JsonFieldObject{}
+	toReturn := JSONFieldObject{}
 	field := ""
 	for *index < len(chunk) {
 		char := string(chunk[*index])
@@ -60,11 +63,11 @@ func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (Json
 		case "(":
 			*openParenthesis++
 			*index++
-			newJsonField, err := p.parseChunk(chunk, index, openParenthesis)
+			newJSONField, err := p.parseChunk(chunk, index, openParenthesis)
 			if err != nil {
 				return toReturn, err
 			}
-			toReturn[field] = newJsonField
+			toReturn[field] = newJSONField
 			field = ""
 		case ")":
 			*openParenthesis--
@@ -94,11 +97,11 @@ func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (Json
 	return toReturn, nil
 }
 
-func (p Parser) addFieldValue(field string, object JsonFieldObject) error {
+func (p Parser) addFieldValue(field string, object JSONFieldObject) error {
 	if field == "" {
 		return ErrFieldIsEmpty
 	}
-	object[field] = JsonFieldValue{}
+	object[field] = JSONFieldValue{}
 
 	return nil
 }

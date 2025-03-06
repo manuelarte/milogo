@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/manuelarte/milogo"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"time"
+
+	"github.com/manuelarte/milogo"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,13 +26,13 @@ func setupRouter() *gin.Engine {
 	r.GET("/users", func(c *gin.Context) {
 		users := []*User{
 			{
-				Name:    "Manuel",
-				Surname: "Example",
+				Name:    "John",
+				Surname: "Doe",
 				Age:     99,
 			},
 			{
 				Name:    "Milo",
-				Surname: "Example",
+				Surname: "Doe",
 				Age:     99,
 			},
 		}

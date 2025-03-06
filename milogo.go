@@ -3,19 +3,20 @@ package milogo
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"github.com/manuelarte/milogo/pkg"
 	"strconv"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/manuelarte/milogo/pkg"
 )
 
-// customResponseWriter captures the response body for modification
+// customResponseWriter captures the response body for modification.
 type customResponseWriter struct {
 	gin.ResponseWriter
 	body *bytes.Buffer
 }
 
-// Write captures the data in the body buffer
+// Write captures the data in the body buffer.
 func (w *customResponseWriter) Write(data []byte) (int, error) {
 	return w.body.Write(data)
 }
@@ -32,25 +33,27 @@ func Milogo(configOptions ...pkg.ConfigOption) gin.HandlerFunc {
 		c.Next()
 
 		// If the content-type is JSON, modify the JSON body
-		if isPartialResponseRequest(c, config) {
-			var jsonData interface{}
-			if err := json.Unmarshal(writer.body.Bytes(), &jsonData); err == nil {
-				fields := c.Query(config.QueryParamField)
+		//nolint:nestif // Refactor later
+		if jsonBody, isPartialResponse := isPartialResponseRequest(c, config); isPartialResponse {
+			fields := c.Query(config.QueryParamField)
 
-				wrappedJsonData := jsonData
-				if config.WrapperField != "" {
-					wrappedJsonData = jsonData.(map[string]interface{})[config.WrapperField]
+			wrappedJSONData := jsonBody
+			if config.WrapperField != "" {
+				if wrappedField, isWrappedAJSON := jsonBody.(map[string]interface{}); isWrappedAJSON {
+					wrappedJSONData = wrappedField[config.WrapperField]
+				} else {
+					return
 				}
-				if partialResponseFields, errParsing := config.Parser.Parse(fields); errParsing == nil &&
-					pkg.Filter(wrappedJsonData, partialResponseFields) == nil {
-					modifiedBody, err := json.Marshal(jsonData)
-					if err == nil {
-						c.Writer = writer.ResponseWriter // Set back to original writer
-						_, _ = c.Writer.Write(modifiedBody)
-						c.Header("Content-Length", strconv.Itoa(len(modifiedBody)))
+			}
+			if partialResponseFields, errParsing := config.Parser.Parse(fields); errParsing == nil &&
+				pkg.Filter(wrappedJSONData, partialResponseFields) == nil {
+				modifiedBody, errMarsh := json.Marshal(jsonBody)
+				if errMarsh == nil {
+					c.Writer = writer.ResponseWriter // Set back to original writer
+					_, _ = c.Writer.Write(modifiedBody)
+					c.Header("Content-Length", strconv.Itoa(len(modifiedBody)))
 
-						return
-					}
+					return
 				}
 			}
 		}
@@ -61,10 +64,21 @@ func Milogo(configOptions ...pkg.ConfigOption) gin.HandlerFunc {
 	}
 }
 
-func isPartialResponseRequest(c *gin.Context, config pkg.Config) bool {
-	isJson := strings.Contains(c.Writer.Header().Get("Content-Type"), "application/json")
-	isFieldQuery := c.Query(config.QueryParamField) != ""
-	isNotBadStatus := c.Writer.Status() < 300 && c.Writer.Status() > 199
+func isPartialResponseRequest(c *gin.Context, config pkg.Config) (interface{}, bool) {
+	is300 := 300
+	is199 := 199
 
-	return isJson && isFieldQuery && isNotBadStatus
+	isJSON := strings.Contains(c.Writer.Header().Get("Content-Type"), "application/json")
+	isFieldQuery := c.Query(config.QueryParamField) != ""
+	isNotBadStatus := c.Writer.Status() < is300 && c.Writer.Status() > is199
+	if isJSON && isFieldQuery && isNotBadStatus {
+		if customWriter, isCustomWriter := c.Writer.(*customResponseWriter); isCustomWriter {
+			var jsonBody interface{}
+			if err := json.Unmarshal(customWriter.body.Bytes(), &jsonBody); err == nil {
+				return jsonBody, true
+			}
+		}
+	}
+
+	return nil, false
 }

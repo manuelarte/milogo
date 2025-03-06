@@ -1,14 +1,17 @@
-package milogo
+package milogo_test
 
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"github.com/manuelarte/milogo/pkg"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/manuelarte/milogo"
+
+	"github.com/gin-gonic/gin"
+	"github.com/manuelarte/milogo/pkg"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEchoRoute(t *testing.T) {
@@ -60,7 +63,7 @@ func TestEchoRoute(t *testing.T) {
 			if test.fields != "" {
 				url += "?fields=" + test.fields
 			}
-			req, _ := http.NewRequest("POST", url, bytes.NewBuffer(out))
+			req, _ := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(out))
 			router.ServeHTTP(w, req)
 
 			assert.Equal(t, 200, w.Code)
@@ -76,21 +79,21 @@ func TestEchoCustomHeadersRoute(t *testing.T) {
 		body               interface{}
 		fields             string
 		customHeaders      map[string]string
-		expectedHttpStatus int
+		expectedHTTPStatus int
 		expectedBody       string
 	}{
 		"query param fields, 1/2, one custom header": {
 			body:               map[string]interface{}{"name": "Manuel", "age": 99},
 			fields:             "name",
 			customHeaders:      map[string]string{"X-Milogo": "one_deleted"},
-			expectedHttpStatus: http.StatusOK,
+			expectedHTTPStatus: http.StatusOK,
 			expectedBody:       `{"name":"Manuel"}`,
 		},
 		"query param fields, 2/2, two custom headers": {
 			body:               map[string]interface{}{"name": "Manuel", "age": 99},
 			fields:             "name,age",
 			customHeaders:      map[string]string{"X-Milogo": "one_deleted", "X-Trace-id": "1"},
-			expectedHttpStatus: http.StatusAccepted,
+			expectedHTTPStatus: http.StatusAccepted,
 			expectedBody:       `{"name":"Manuel","age":99}`,
 		},
 	}
@@ -112,7 +115,7 @@ func TestEchoCustomHeadersRoute(t *testing.T) {
 
 					return
 				}
-				c.JSON(test.expectedHttpStatus, body)
+				c.JSON(test.expectedHTTPStatus, body)
 			})
 
 			w := httptest.NewRecorder()
@@ -123,10 +126,10 @@ func TestEchoCustomHeadersRoute(t *testing.T) {
 			if test.fields != "" {
 				url += "?fields=" + test.fields
 			}
-			req, _ := http.NewRequest("POST", url, bytes.NewBuffer(out))
+			req, _ := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(out))
 			router.ServeHTTP(w, req)
 
-			assert.Equal(t, test.expectedHttpStatus, w.Code)
+			assert.Equal(t, test.expectedHTTPStatus, w.Code)
 			for key, value := range test.customHeaders {
 				assert.Equal(t, value, w.Header().Get(key))
 			}
@@ -174,7 +177,7 @@ func TestArrayRoute(t *testing.T) {
 			if test.fields != "" {
 				url += "?fields=" + test.fields
 			}
-			req, _ := http.NewRequest("POST", url, bytes.NewBuffer(out))
+			req, _ := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(out))
 			router.ServeHTTP(w, req)
 
 			assert.Equal(t, 200, w.Code)
@@ -234,7 +237,7 @@ func TestEchoWrapRoute(t *testing.T) {
 			if test.fields != "" {
 				url += "?fields=" + test.fields
 			}
-			req, _ := http.NewRequest("POST", url, bytes.NewBuffer(out))
+			req, _ := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(out))
 			router.ServeHTTP(w, req)
 
 			assert.Equal(t, 200, w.Code)
@@ -245,7 +248,7 @@ func TestEchoWrapRoute(t *testing.T) {
 
 func setupRouter(configOptions ...pkg.ConfigOption) *gin.Engine {
 	r := gin.Default()
-	r.Use(Milogo(configOptions...))
+	r.Use(milogo.Milogo(configOptions...))
 
 	return r
 }

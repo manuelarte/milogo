@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/manuelarte/milogo"
-	"github.com/manuelarte/milogo/pkg"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"time"
+
+	"github.com/manuelarte/milogo"
+	"github.com/manuelarte/milogo/pkg"
 
 	"github.com/gin-gonic/gin"
 )
@@ -40,7 +41,7 @@ func setupRouter() *gin.Engine {
 		name := c.Params.ByName("name")
 		user := User{
 			Name:    name,
-			Surname: "Example",
+			Surname: "Doe",
 			Age:     1,
 			Address: Address{
 				Street:  "mystreet",
@@ -65,7 +66,7 @@ func main() {
 	go func() {
 		time.Sleep(time.Second)
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/users/manuel?fields=name,surname,address", nil)
+		req, _ := http.NewRequest("GET", "/users/john?fields=name,surname,address", nil)
 		r.ServeHTTP(w, req)
 		fmt.Printf(w.Body.String())
 		os.Exit(1)

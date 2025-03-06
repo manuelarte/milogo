@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/manuelarte/milogo"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"time"
+
+	"github.com/manuelarte/milogo"
 
 	"github.com/gin-gonic/gin"
 )
@@ -57,9 +58,10 @@ func main() {
 		fmt.Printf("All the address fields:\n%s", w.Body.String())
 
 		w = httptest.NewRecorder()
-		req, _ = http.NewRequest("GET", "/users/manuel?fields=name,surname,address(number,zipcode)", nil)
+		fields := "name,surname,address(number,zipcode)"
+		req, _ = http.NewRequest("GET", fmt.Sprintf("/users/manuel?fields=%s", fields), nil)
 		r.ServeHTTP(w, req)
-		fmt.Printf("Some address fields:\n%s", w.Body.String())
+		fmt.Printf("Some address fields(%s):\n%s", fields, w.Body.String())
 
 		os.Exit(1)
 	}()
