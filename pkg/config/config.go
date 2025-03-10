@@ -1,15 +1,17 @@
-package pkg
+package config
+
+import "github.com/manuelarte/milogo/internal/parser"
 
 type Config struct {
 	QueryParamField string
 	WrapperField    string
-	Parser          Parser
+	Parser          parser.Parser
 }
 
-func DefaultConfig(configOptions ...ConfigOption) Config {
+func DefaultConfig(configOptions ...Option) Config {
 	c := Config{
 		QueryParamField: "fields",
-		Parser:          NewParser(),
+		Parser:          parser.NewParser(),
 	}
 	for _, co := range configOptions {
 		co(&c)
@@ -18,9 +20,9 @@ func DefaultConfig(configOptions ...ConfigOption) Config {
 	return c
 }
 
-type ConfigOption func(c *Config)
+type Option func(c *Config)
 
-func WithWrapField(wrapperField string) (ConfigOption, error) {
+func WithWrapField(wrapperField string) (Option, error) {
 	// validate wrapper field is not several words, but only one and alphanumeric
 	return func(c *Config) {
 		c.WrapperField = wrapperField

@@ -1,9 +1,9 @@
-package pkg_test
+package parser_test
 
 import (
+	"github.com/manuelarte/milogo/internal/parser"
+	"github.com/manuelarte/milogo/pkg/errors"
 	"testing"
-
-	"github.com/manuelarte/milogo/pkg"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -13,22 +13,22 @@ func TestFilter(t *testing.T) {
 
 	tests := map[string]struct {
 		jsonData        map[string]interface{}
-		jsonFieldObject pkg.JSONFieldObject
+		jsonFieldObject parser.JSONFieldObject
 		expected        map[string]interface{}
 	}{
 		"no nested json,querying one not existing field": {
 			jsonData:        map[string]interface{}{"name": "Manuel", "age": 99},
-			jsonFieldObject: pkg.JSONFieldObject{"surname": pkg.JSONFieldValue{}},
+			jsonFieldObject: parser.JSONFieldObject{"surname": parser.JSONFieldValue{}},
 			expected:        map[string]interface{}{},
 		},
 		"no nested json,querying one field": {
 			jsonData:        map[string]interface{}{"name": "Manuel", "age": 99},
-			jsonFieldObject: pkg.JSONFieldObject{"name": pkg.JSONFieldValue{}},
+			jsonFieldObject: parser.JSONFieldObject{"name": parser.JSONFieldValue{}},
 			expected:        map[string]interface{}{"name": "Manuel"},
 		},
 		"no nested json,querying two field": {
 			jsonData:        map[string]interface{}{"name": "Manuel", "age": 99},
-			jsonFieldObject: pkg.JSONFieldObject{"name": pkg.JSONFieldValue{}, "age": pkg.JSONFieldValue{}},
+			jsonFieldObject: parser.JSONFieldObject{"name": parser.JSONFieldValue{}, "age": parser.JSONFieldValue{}},
 			expected:        map[string]interface{}{"name": "Manuel", "age": 99},
 		},
 		"nested json,querying all nested field": {
@@ -36,9 +36,9 @@ func TestFilter(t *testing.T) {
 				"name": "Manuel", "age": 99,
 				"address": map[string]interface{}{"street": "mystreet", "number": 1},
 			},
-			jsonFieldObject: pkg.JSONFieldObject{
-				"name": pkg.JSONFieldValue{}, "age": pkg.JSONFieldValue{},
-				"address": pkg.JSONFieldValue{},
+			jsonFieldObject: parser.JSONFieldObject{
+				"name": parser.JSONFieldValue{}, "age": parser.JSONFieldValue{},
+				"address": parser.JSONFieldValue{},
 			},
 			expected: map[string]interface{}{
 				"name": "Manuel", "age": 99,
@@ -50,9 +50,9 @@ func TestFilter(t *testing.T) {
 				"name": "Manuel", "age": 99,
 				"addresses": []map[string]interface{}{{"street": "mystreet", "number": 1}},
 			},
-			jsonFieldObject: pkg.JSONFieldObject{
-				"name": pkg.JSONFieldValue{},
-				"age":  pkg.JSONFieldValue{}, "addresses": pkg.JSONFieldValue{},
+			jsonFieldObject: parser.JSONFieldObject{
+				"name": parser.JSONFieldValue{},
+				"age":  parser.JSONFieldValue{}, "addresses": parser.JSONFieldValue{},
 			},
 			expected: map[string]interface{}{
 				"name": "Manuel", "age": 99,
@@ -64,9 +64,9 @@ func TestFilter(t *testing.T) {
 				"name": "Manuel", "age": 99,
 				"addresses": []map[string]interface{}{{"street": "mystreet", "number": 1}},
 			},
-			jsonFieldObject: pkg.JSONFieldObject{
-				"name": pkg.JSONFieldValue{}, "age": pkg.JSONFieldValue{},
-				"addresses": pkg.JSONFieldObject{"street": pkg.JSONFieldValue{}},
+			jsonFieldObject: parser.JSONFieldObject{
+				"name": parser.JSONFieldValue{}, "age": parser.JSONFieldValue{},
+				"addresses": parser.JSONFieldObject{"street": parser.JSONFieldValue{}},
 			},
 			expected: map[string]interface{}{
 				"name": "Manuel", "age": 99,
@@ -78,7 +78,7 @@ func TestFilter(t *testing.T) {
 		name, test := name, test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			err := pkg.Filter(test.jsonData, test.jsonFieldObject)
+			err := parser.Filter(test.jsonData, test.jsonFieldObject)
 			if assert.NoError(t, err) {
 				assert.Equal(t, test.expected, test.jsonData)
 			}
@@ -93,23 +93,23 @@ func TestFilterErrors(t *testing.T) {
 
 	tests := map[string]struct {
 		jsonData        map[string]interface{}
-		jsonFieldObject pkg.JSONFieldObject
+		jsonFieldObject parser.JSONFieldObject
 		expected        error
 	}{
 		"querying not existing nested json": {
 			jsonData: map[string]interface{}{"name": "Manuel", "age": 99},
-			jsonFieldObject: pkg.JSONFieldObject{"name": pkg.JSONFieldObject{
-				"a": pkg.JSONFieldValue{},
-				"b": pkg.JSONFieldValue{},
+			jsonFieldObject: parser.JSONFieldObject{"name": parser.JSONFieldObject{
+				"a": parser.JSONFieldValue{},
+				"b": parser.JSONFieldValue{},
 			}},
-			expected: pkg.NotAnObjectError("name"),
+			expected: errors.NotAnObjectError("name"),
 		},
 	}
 	for name, test := range tests {
 		name, test := name, test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			err := pkg.Filter(test.jsonData, test.jsonFieldObject)
+			err := parser.Filter(test.jsonData, test.jsonFieldObject)
 			if assert.Error(t, err) {
 				assert.Equal(t, test.expected, err)
 			}

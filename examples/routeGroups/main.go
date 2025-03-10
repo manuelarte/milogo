@@ -2,15 +2,14 @@ package main
 
 import (
 	"fmt"
+	"github.com/manuelarte/milogo/pkg/config"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"time"
 
-	"github.com/manuelarte/milogo"
-	"github.com/manuelarte/milogo/pkg"
-
 	"github.com/gin-gonic/gin"
+	"github.com/manuelarte/milogo"
 )
 
 var (
@@ -52,7 +51,7 @@ func setupRouter() *gin.Engine {
 		}
 	})
 
-	milogoOption, _ := pkg.WithWrapField("data")
+	milogoOption, _ := config.WithWrapField("data")
 	wrappedUsersGroup := r.Group("/wrapped/users", milogo.Milogo(milogoOption))
 	wrappedUsersGroup.GET("", func(c *gin.Context) {
 		c.IndentedJSON(http.StatusOK, Response[[]User]{

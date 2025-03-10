@@ -1,4 +1,8 @@
-package pkg
+package parser
+
+import (
+	"github.com/manuelarte/milogo/pkg/errors"
+)
 
 func Filter(jsonData interface{}, partialResponseFields JSONFieldObject) error {
 	if casted, ok := jsonData.(map[string]interface{}); ok {
@@ -15,7 +19,7 @@ func Filter(jsonData interface{}, partialResponseFields JSONFieldObject) error {
 		return nil
 	}
 
-	return ErrUnrecognizedFormat
+	return errors.ErrUnrecognizedFormat
 }
 
 //nolint:gocognit // Refactor later
@@ -36,7 +40,7 @@ func filterMap(jsonData map[string]interface{}, partialResponseFields JSONFieldO
 					if nestedObject, isMap := value.(map[string]interface{}); isMap {
 						return filterMap(nestedObject, casted)
 					}
-					return NotAnObjectError(key)
+					return errors.NotAnObjectError(key)
 				}
 			}
 		}

@@ -13,9 +13,10 @@ import (
 )
 
 type User struct {
-	Name    string `json:"name"`
-	Surname string `json:"surname"`
-	Age     int    `json:"age"`
+	Name            string `json:"name"`
+	Surname         string `json:"surname"`
+	Age             int    `json:"age"`
+	FavouriteColour string `json:"favouriteColour"`
 }
 
 func setupRouter() *gin.Engine {
@@ -25,9 +26,10 @@ func setupRouter() *gin.Engine {
 	// Get user value
 	r.GET("/users/:name", func(c *gin.Context) {
 		user := User{
-			Name:    c.Params.ByName("name"),
-			Surname: "Doe",
-			Age:     1,
+			Name:            c.Params.ByName("name"),
+			Surname:         "Doe",
+			Age:             18,
+			FavouriteColour: "red",
 		}
 		c.IndentedJSON(http.StatusOK, user)
 	})

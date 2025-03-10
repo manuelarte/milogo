@@ -3,6 +3,7 @@ package milogo_test
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/manuelarte/milogo/pkg/config"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -10,7 +11,6 @@ import (
 	"github.com/manuelarte/milogo"
 
 	"github.com/gin-gonic/gin"
-	"github.com/manuelarte/milogo/pkg"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -219,7 +219,7 @@ func TestEchoWrapRoute(t *testing.T) {
 		name, test := name, test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			milogoOption, _ := pkg.WithWrapField("data")
+			milogoOption, _ := config.WithWrapField("data")
 			router := setupRouter(milogoOption)
 			url := "/echo-wrap"
 			router.POST(url, func(c *gin.Context) {
@@ -246,7 +246,7 @@ func TestEchoWrapRoute(t *testing.T) {
 	}
 }
 
-func setupRouter(configOptions ...pkg.ConfigOption) *gin.Engine {
+func setupRouter(configOptions ...config.Option) *gin.Engine {
 	r := gin.Default()
 	r.Use(milogo.Milogo(configOptions...))
 

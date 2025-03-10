@@ -1,8 +1,6 @@
-package pkg
+package parser
 
-const (
-	defaultFieldSeparator = ","
-)
+import "github.com/manuelarte/milogo/pkg/errors"
 
 type JSONField interface{}
 
@@ -17,6 +15,7 @@ type JSONFieldValue struct{}
 type JSONFieldObject map[string]JSONField
 
 func NewParser() Parser {
+	const defaultFieldSeparator = ","
 	return Parser{
 		fieldSeparator: defaultFieldSeparator,
 	}
@@ -29,7 +28,7 @@ type Parser struct {
 // Parse String to get what fields are present.
 func (p Parser) Parse(fields string) (JSONFieldObject, error) {
 	if fields == "" {
-		return nil, ErrFieldsIsEmpty
+		return nil, errors.ErrFieldsIsEmpty
 	}
 	openParenthesis := 0
 	index := 0
@@ -45,7 +44,7 @@ func (p Parser) Parse(fields string) (JSONFieldObject, error) {
 //nolint:gocognit
 func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (JSONFieldObject, error) {
 	if chunk == "" {
-		return nil, ErrFieldIsEmpty
+		return nil, errors.ErrFieldIsEmpty
 	}
 	toReturn := JSONFieldObject{}
 	field := ""
@@ -91,7 +90,7 @@ func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (JSON
 		}
 	}
 	if *openParenthesis != 0 {
-		return nil, ErrUnbalancedParenthesis
+		return nil, errors.ErrUnbalancedParenthesis
 	}
 
 	return toReturn, nil
@@ -99,7 +98,7 @@ func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (JSON
 
 func (p Parser) addFieldValue(field string, object JSONFieldObject) error {
 	if field == "" {
-		return ErrFieldIsEmpty
+		return errors.ErrFieldIsEmpty
 	}
 	object[field] = JSONFieldValue{}
 
