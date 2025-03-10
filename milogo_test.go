@@ -3,10 +3,11 @@ package milogo_test
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/manuelarte/milogo/pkg/config"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/manuelarte/milogo/pkg/config"
 
 	"github.com/manuelarte/milogo"
 

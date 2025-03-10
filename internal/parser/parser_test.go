@@ -1,8 +1,9 @@
 package parser_test
 
 import (
-	"github.com/manuelarte/milogo/internal/parser"
 	"testing"
+
+	"github.com/manuelarte/milogo/internal/parser"
 
 	"github.com/stretchr/testify/assert"
 )
