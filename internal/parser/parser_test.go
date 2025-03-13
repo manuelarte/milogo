@@ -23,8 +23,10 @@ func TestParser(t *testing.T) {
 			fields: "name,address(street,number)",
 			expected: parser.JSONFieldObject{
 				"name": parser.JSONFieldValue{},
-				"address": parser.JSONFieldObject{"street": parser.JSONFieldValue{},
-					"number": parser.JSONFieldValue{}},
+				"address": parser.JSONFieldObject{
+					"street": parser.JSONFieldValue{},
+					"number": parser.JSONFieldValue{},
+				},
 			},
 		},
 		"querying simple and nested complex fields": {
@@ -41,8 +43,10 @@ func TestParser(t *testing.T) {
 			fields: "a,b(c,d,e),f,g",
 			expected: parser.JSONFieldObject{
 				"a": parser.JSONFieldValue{},
-				"b": parser.JSONFieldObject{"c": parser.JSONFieldValue{}, "d": parser.JSONFieldValue{},
-					"e": parser.JSONFieldValue{}},
+				"b": parser.JSONFieldObject{
+					"c": parser.JSONFieldValue{}, "d": parser.JSONFieldValue{},
+					"e": parser.JSONFieldValue{},
+				},
 				"f": parser.JSONFieldValue{}, "g": parser.JSONFieldValue{},
 			},
 		},
@@ -56,7 +60,6 @@ func TestParser(t *testing.T) {
 		},
 	}
 	for name, test := range tests {
-		name, test := name, test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			prs := parser.NewParser()
