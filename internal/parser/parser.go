@@ -14,15 +14,15 @@ type JSONFieldValue struct{}
 
 type JSONFieldObject map[string]JSONField
 
+type Parser struct {
+	fieldSeparator string
+}
+
 func NewParser() Parser {
 	const defaultFieldSeparator = ","
 	return Parser{
 		fieldSeparator: defaultFieldSeparator,
 	}
-}
-
-type Parser struct {
-	fieldSeparator string
 }
 
 // Parse String to get what fields are present.
