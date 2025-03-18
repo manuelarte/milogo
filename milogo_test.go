@@ -40,7 +40,6 @@ func TestEchoRoute(t *testing.T) {
 		},
 	}
 	for name, test := range tests {
-		name, test := name, test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			router := setupRouter()
@@ -99,7 +98,6 @@ func TestEchoCustomHeadersRoute(t *testing.T) {
 		},
 	}
 	for name, test := range tests {
-		name, test := name, test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			router := setupRouter()
@@ -159,7 +157,6 @@ func TestArrayRoute(t *testing.T) {
 		},
 	}
 	for name, test := range tests {
-		name, test := name, test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			router := setupRouter()
@@ -217,7 +214,6 @@ func TestEchoWrapRoute(t *testing.T) {
 		},
 	}
 	for name, test := range tests {
-		name, test := name, test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			milogoOption, _ := config.WithWrapField("data")

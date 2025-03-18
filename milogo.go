@@ -3,12 +3,11 @@ package milogo
 import (
 	"bytes"
 	"encoding/json"
+	"strconv"
+	"strings"
 
 	"github.com/manuelarte/milogo/internal/parser"
 	"github.com/manuelarte/milogo/pkg/config"
-
-	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 )

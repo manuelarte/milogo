@@ -76,7 +76,6 @@ func TestFilter(t *testing.T) {
 		},
 	}
 	for name, test := range tests {
-		name, test := name, test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			err := parser.Filter(test.jsonData, test.jsonFieldObject)
@@ -107,7 +106,6 @@ func TestFilterErrors(t *testing.T) {
 		},
 	}
 	for name, test := range tests {
-		name, test := name, test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			err := parser.Filter(test.jsonData, test.jsonFieldObject)
