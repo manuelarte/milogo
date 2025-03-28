@@ -6,7 +6,6 @@ name: Go
 on:
   workflow_dispatch:
   push:
-    branches: [ "main", "dev" ]
   pull_request:
     branches: [ "main" ]
 
@@ -16,12 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: [ '1.21', '1.22', '1.23' ]
+        go: [ '1.21', '1.22', 'oldstable', 'stable' ]
     name: Go ${{ matrix.go }} sample
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Go
+    - name: Set up Go ${{ matrix.go }}
       uses: actions/setup-go@v5
       with:
         go-version: ${{ matrix.go }}
@@ -35,7 +34,7 @@ jobs:
     - name: check test coverage
       uses: vladopajic/go-test-coverage@v2
       with:
-        config: ./.testcoverage.yml
+        config: ./.github/.testcoverage.yml
         profile: cover.out
         local-prefix: github.com/manuelarte/milogo
         ## when token is not specified (value '') this feature is turned off
