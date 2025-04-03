@@ -9,10 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### TODO
 
-- Modify examples to use only one example with different routes, 
++ Modify examples to use only one example with different routes, 
 so then you only need to import the project one time and you can show how to use the middleware per route group, etc for the wrapped functionality
-- If you put a "wrong" wrapper field then all the json is shown, when maybe we should use return the default behaviour
-- If you chose indented json, you lose the indentation
++ If you put a "wrong" wrapper field then all the json is shown, when maybe we should return the default behaviour
++ If you chose indented json, you lose the indentation
 
 ## [v0.0.2] 2025-11-01
 

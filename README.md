@@ -1,8 +1,10 @@
+# Milogo
+
 [![Go](https://github.com/manuelarte/milogo/actions/workflows/go.yml/badge.svg)](https://github.com/manuelarte/milogo/actions/workflows/go.yml)
 ![coverage](https://raw.githubusercontent.com/manuelarte/milogo/badges/.badges/main/coverage.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/manuelarte/milogo)](https://goreportcard.com/report/github.com/manuelarte/milogo)
 ![version](https://img.shields.io/github/v/release/manuelarte/milogo)
-# Milogo
+
 Rest Partial Response (aka Field Selection) Pattern middleware for [Gin](https://gin-gonic.com/). This gin middleware allows you to select a subset of fields to be returned from your endpoints.
 
 e.g. Imagine that you have the following rest endpoint that returns an user with the fields, `id, name, surname, age, address`:
@@ -21,6 +23,7 @@ e.g. Imagine that you have the following rest endpoint that returns an user with
  }
 }
 ```
+
 We can call the endpoint and, with the query parameter fields, filter out the fields that we are interested:
 > /users/1?**fields=name,surname**
 ```json
