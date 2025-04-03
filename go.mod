@@ -2,8 +2,6 @@ module github.com/manuelarte/milogo
 
 go 1.23.0
 
-toolchain go1.23.7
-
 require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/stretchr/testify v1.10.0
