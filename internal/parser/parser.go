@@ -16,7 +16,7 @@ type JSONFieldValue struct{}
 
 func (j JSONFieldValue) isJSONField() {}
 
-// JSONFieldObject Holder that indicates that the field can contain inner fields, e.g. "address"("number","name")
+// JSONFieldObject Holder that indicates that the field can contain inner fields, e.g. "address"("number","name").
 type JSONFieldObject map[string]JSONField
 
 func (j JSONFieldObject) isJSONField() {}
@@ -48,6 +48,7 @@ func (p Parser) Parse(fields string) (JSONFieldObject, error) {
 	return toReturn, nil
 }
 
+//nolint:gocognit
 func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (JSONFieldObject, error) {
 	if chunk == "" {
 		return nil, errors.ErrFieldIsEmpty
