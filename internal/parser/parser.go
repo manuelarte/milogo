@@ -2,7 +2,9 @@ package parser
 
 import "github.com/manuelarte/milogo/pkg/errors"
 
-type JSONField interface{}
+type JSONField interface {
+	isJSONField()
+}
 
 var (
 	_ JSONField = new(JSONFieldValue)
@@ -12,7 +14,12 @@ var (
 // JSONFieldValue Holder that indicates that the field is just a value.
 type JSONFieldValue struct{}
 
+func (j JSONFieldValue) isJSONField() {}
+
+// JSONFieldObject Holder that indicates that the field can contain inner fields, e.g. "address"("number","name")
 type JSONFieldObject map[string]JSONField
+
+func (j JSONFieldObject) isJSONField() {}
 
 type Parser struct {
 	fieldSeparator string
@@ -41,7 +48,6 @@ func (p Parser) Parse(fields string) (JSONFieldObject, error) {
 	return toReturn, nil
 }
 
-//nolint:gocognit
 func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (JSONFieldObject, error) {
 	if chunk == "" {
 		return nil, errors.ErrFieldIsEmpty
