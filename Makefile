@@ -16,11 +16,10 @@ test: ## Run unit tests, alias: t
 
 fmt: format-code
 format-code: tidy ## Format go code and run the fixer, alias: fmt
-	gofumpt -l -w .
+	golangci-lint fmt
 	golangci-lint run --fix ./...
 .PHONY: fmt format-code
 
 tools: ## Install extra tools for development
-	go install github.com/manuelarte/funcorder@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 .PHONY: tools
