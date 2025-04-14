@@ -18,8 +18,10 @@ fmt: format-code
 format-code: tidy ## Format go code and run the fixer, alias: fmt
 	golangci-lint fmt
 	golangci-lint run --fix ./...
+	govulncheck ./...
 .PHONY: fmt format-code
 
 tools: ## Install extra tools for development
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	go install golang.org/x/vuln/cmd/govulncheck@latest
 .PHONY: tools
