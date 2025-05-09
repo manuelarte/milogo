@@ -69,6 +69,7 @@ linters:
     - testableexamples
     - testifylint
     - testpackage
+    - thelper
     - tparallel
     - unconvert
     - unparam
