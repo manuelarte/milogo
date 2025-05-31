@@ -4,12 +4,12 @@ import (
 	"github.com/manuelarte/milogo/pkg/errors"
 )
 
-func Filter(jsonData interface{}, partialResponseFields JSONFieldObject) error {
-	if casted, ok := jsonData.(map[string]interface{}); ok {
+func Filter(jsonData any, partialResponseFields JSONFieldObject) error {
+	if casted, ok := jsonData.(map[string]any); ok {
 		return filterMap(casted, partialResponseFields)
-	} else if array, okCast := jsonData.([]interface{}); okCast {
+	} else if array, okCast := jsonData.([]any); okCast {
 		for _, item := range array {
-			if innerCasted, okMap := item.(map[string]interface{}); okMap {
+			if innerCasted, okMap := item.(map[string]any); okMap {
 				if err := filterMap(innerCasted, partialResponseFields); err != nil {
 					return err
 				}
@@ -23,13 +23,13 @@ func Filter(jsonData interface{}, partialResponseFields JSONFieldObject) error {
 }
 
 //nolint:gocognit // Refactor later
-func filterMap(jsonData map[string]interface{}, partialResponseFields JSONFieldObject) error {
+func filterMap(jsonData map[string]any, partialResponseFields JSONFieldObject) error {
 	for key, value := range jsonData {
 		//nolint:nestif // Refactor later
 		if _, ok := partialResponseFields[key]; !ok {
 			delete(jsonData, key)
 		} else {
-			if values, okCast := value.([]map[string]interface{}); okCast {
+			if values, okCast := value.([]map[string]any); okCast {
 				for _, value := range values {
 					if nestedPartialResponse, isFieldObject := partialResponseFields[key].(JSONFieldObject); isFieldObject {
 						return filterMap(value, nestedPartialResponse)
@@ -37,7 +37,7 @@ func filterMap(jsonData map[string]interface{}, partialResponseFields JSONFieldO
 				}
 			} else {
 				if casted, isFieldObject := partialResponseFields[key].(JSONFieldObject); isFieldObject {
-					if nestedObject, isMap := value.(map[string]interface{}); isMap {
+					if nestedObject, isMap := value.(map[string]any); isMap {
 						return filterMap(nestedObject, casted)
 					}
 					return errors.NotAnObjectError(key)

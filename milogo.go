@@ -41,7 +41,7 @@ func Milogo(configOptions ...config.Option) gin.HandlerFunc {
 
 			wrappedJSONData := jsonBody
 			if cfg.WrapperField != "" {
-				if wrappedField, isWrappedAJSON := jsonBody.(map[string]interface{}); isWrappedAJSON {
+				if wrappedField, isWrappedAJSON := jsonBody.(map[string]any); isWrappedAJSON {
 					wrappedJSONData = wrappedField[cfg.WrapperField]
 				} else {
 					return
@@ -66,7 +66,7 @@ func Milogo(configOptions ...config.Option) gin.HandlerFunc {
 	}
 }
 
-func isPartialResponseRequest(c *gin.Context, cfg config.Config) (interface{}, bool) {
+func isPartialResponseRequest(c *gin.Context, cfg config.Config) (any, bool) {
 	is300 := 300
 	is199 := 199
 
