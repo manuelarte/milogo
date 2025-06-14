@@ -15,6 +15,7 @@ import (
 // customResponseWriter captures the response body for modification.
 type customResponseWriter struct {
 	gin.ResponseWriter
+
 	body *bytes.Buffer
 }
 
@@ -28,7 +29,7 @@ func Milogo(configOptions ...config.Option) gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		// Create a custom response writer
-		writer := &customResponseWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
+		writer := &customResponseWriter{ResponseWriter: c.Writer, body: bytes.NewBufferString("")}
 		c.Writer = writer
 
 		// Continue to the next middleware/handler
