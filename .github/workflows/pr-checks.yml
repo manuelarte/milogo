@@ -1,8 +1,10 @@
 ---
-name: linters
+name: pr-checks
 on:
   push:
   pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -57,11 +59,10 @@ jobs:
       - name: Check spelling of entire workspace
         uses: crate-ci/typos@v1
   markdown:
-    name: typos
+    name: markdownlint
     runs-on: ubuntu-latest
     steps:
       - uses: DavidAnson/markdownlint-cli2-action@v19
-        continue-on-error: true
         with:
           globs: "**/*.md"
   golangci:
