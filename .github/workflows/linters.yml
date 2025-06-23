@@ -63,11 +63,11 @@ jobs:
       - uses: DavidAnson/markdownlint-cli2-action@v19
         continue-on-error: true
         with:
-          globs: '**/*.md'
+          globs: "**/*.md"
   golangci:
     strategy:
       matrix:
-        go: ["1.22", oldstable, stable]
+        go: [oldstable, stable]
         os: [ubuntu-latest, macos-latest]
     name: lint
     runs-on: ${{ matrix.os }}
