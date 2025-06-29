@@ -5,8 +5,8 @@ go 1.23.2
 replace github.com/manuelarte/milogo => ../
 
 require (
-	github.com/gin-gonic/gin v1.10.0
-	github.com/manuelarte/milogo v0.0.2
+	github.com/gin-gonic/gin v1.10.1
+	github.com/manuelarte/milogo v0.0.3
 )
 
 require (

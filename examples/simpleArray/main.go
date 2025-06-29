@@ -1,15 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"time"
 
-	"github.com/manuelarte/milogo"
-
 	"github.com/gin-gonic/gin"
+
+	"github.com/manuelarte/milogo"
 )
 
 type User struct {
@@ -45,10 +46,11 @@ func setupRouter() *gin.Engine {
 func main() {
 	r := setupRouter()
 
+	ctx := context.Background()
 	go func() {
 		time.Sleep(time.Second)
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/users?fields=name,surname", nil)
+		req, _ := http.NewRequestWithContext(ctx, "GET", "/users?fields=name,surname", nil)
 		r.ServeHTTP(w, req)
 		fmt.Println(w.Body.String())
 		os.Exit(1)
