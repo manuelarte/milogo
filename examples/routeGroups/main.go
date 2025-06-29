@@ -1,17 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"time"
 
-	"github.com/manuelarte/milogo/pkg/config"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/manuelarte/milogo"
+	"github.com/manuelarte/milogo/pkg/config"
 )
 
 var (
@@ -79,20 +79,21 @@ func setupRouter() *gin.Engine {
 func main() {
 	r := setupRouter()
 
+	ctx := context.Background()
 	go func() {
 		time.Sleep(time.Second)
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/users?fields=name", nil)
+		req, _ := http.NewRequestWithContext(ctx, "GET", "/users?fields=name", nil)
 		r.ServeHTTP(w, req)
 		fmt.Println(w.Body.String())
 
 		w = httptest.NewRecorder()
-		req, _ = http.NewRequest("GET", "/users/manuel?fields=name,surname", nil)
+		req, _ = http.NewRequestWithContext(ctx, "GET", "/users/manuel?fields=name,surname", nil)
 		r.ServeHTTP(w, req)
 		fmt.Println(w.Body.String())
 
 		w = httptest.NewRecorder()
-		req, _ = http.NewRequest("GET", "/wrapped/users/manuel?fields=name,surname", nil)
+		req, _ = http.NewRequestWithContext(ctx, "GET", "/wrapped/users/manuel?fields=name,surname", nil)
 		r.ServeHTTP(w, req)
 		fmt.Println(w.Body.String())
 		os.Exit(1)

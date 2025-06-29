@@ -1,15 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"time"
 
-	"github.com/manuelarte/milogo"
-
 	"github.com/gin-gonic/gin"
+
+	"github.com/manuelarte/milogo"
 )
 
 type Address struct {
@@ -50,16 +51,17 @@ func setupRouter() *gin.Engine {
 func main() {
 	r := setupRouter()
 
+	ctx := context.Background()
 	go func() {
 		time.Sleep(time.Second)
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/users/manuel?fields=name,surname,address", nil)
+		req, _ := http.NewRequestWithContext(ctx, "GET", "/users/manuel?fields=name,surname,address", nil)
 		r.ServeHTTP(w, req)
 		fmt.Printf("All the address fields:\n%s", w.Body.String())
 
 		w = httptest.NewRecorder()
 		fields := "name,surname,address(number,zipcode)"
-		req, _ = http.NewRequest("GET", fmt.Sprintf("/users/manuel?fields=%s", fields), nil)
+		req, _ = http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("/users/manuel?fields=%s", fields), nil)
 		r.ServeHTTP(w, req)
 		fmt.Printf("Some address fields(%s):\n%s", fields, w.Body.String())
 

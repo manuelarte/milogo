@@ -3,9 +3,9 @@ package parser_test
 import (
 	"testing"
 
-	"github.com/manuelarte/milogo/internal/parser"
-
 	"github.com/stretchr/testify/assert"
+
+	"github.com/manuelarte/milogo/internal/parser"
 )
 
 func TestParser(t *testing.T) {
@@ -62,7 +62,9 @@ func TestParser(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
+
 			prs := parser.NewParser()
+
 			actual, err := prs.Parse(test.fields)
 			if assert.NoError(t, err) {
 				assert.Equal(t, test.expected, actual)

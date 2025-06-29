@@ -1,17 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"time"
 
-	"github.com/manuelarte/milogo/pkg/config"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/manuelarte/milogo"
+	"github.com/manuelarte/milogo/pkg/config"
 )
 
 type Address struct {
@@ -64,10 +64,11 @@ func setupRouter() *gin.Engine {
 func main() {
 	r := setupRouter()
 
+	ctx := context.Background()
 	go func() {
 		time.Sleep(time.Second)
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/users/john?fields=name,surname,address", nil)
+		req, _ := http.NewRequestWithContext(ctx, "GET", "/users/john?fields=name,surname,address", nil)
 		r.ServeHTTP(w, req)
 		fmt.Printf(w.Body.String())
 		os.Exit(1)

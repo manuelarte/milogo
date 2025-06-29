@@ -27,6 +27,7 @@ type Parser struct {
 
 func NewParser() Parser {
 	const defaultFieldSeparator = ","
+
 	return Parser{
 		fieldSeparator: defaultFieldSeparator,
 	}
@@ -37,8 +38,10 @@ func (p Parser) Parse(fields string) (JSONFieldObject, error) {
 	if fields == "" {
 		return nil, errors.ErrFieldsIsEmpty
 	}
+
 	openParenthesis := 0
 	index := 0
+
 	toReturn, err := p.parseChunk(fields, &index, &openParenthesis)
 	if err != nil {
 		return nil, err
@@ -49,12 +52,14 @@ func (p Parser) Parse(fields string) (JSONFieldObject, error) {
 }
 
 //nolint:gocognit
-func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (JSONFieldObject, error) {
+func (p Parser) parseChunk(chunk string, index, openParenthesis *int) (JSONFieldObject, error) {
 	if chunk == "" {
 		return nil, errors.ErrFieldIsEmpty
 	}
+
 	toReturn := JSONFieldObject{}
 	field := ""
+
 	for *index < len(chunk) {
 		char := string(chunk[*index])
 		switch char {
@@ -64,19 +69,23 @@ func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (JSON
 				if err != nil {
 					return toReturn, err
 				}
+
 				field = ""
 			}
 		case "(":
 			*openParenthesis++
 			*index++
+
 			newJSONField, err := p.parseChunk(chunk, index, openParenthesis)
 			if err != nil {
 				return toReturn, err
 			}
+
 			toReturn[field] = newJSONField
 			field = ""
 		case ")":
 			*openParenthesis--
+
 			if field != "" {
 				err := p.addFieldValue(field, toReturn)
 				if err != nil {
@@ -88,14 +97,17 @@ func (p Parser) parseChunk(chunk string, index *int, openParenthesis *int) (JSON
 		default:
 			field += char
 		}
+
 		*index++
 	}
+
 	if len(field) > 0 {
 		err := p.addFieldValue(field, toReturn)
 		if err != nil {
 			return toReturn, err
 		}
 	}
+
 	if *openParenthesis != 0 {
 		return nil, errors.ErrUnbalancedParenthesis
 	}
@@ -107,6 +119,7 @@ func (p Parser) addFieldValue(field string, object JSONFieldObject) error {
 	if field == "" {
 		return errors.ErrFieldIsEmpty
 	}
+
 	object[field] = JSONFieldValue{}
 
 	return nil
