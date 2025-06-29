@@ -1,6 +1,6 @@
 module simple
 
-go 1.23.2
+go 1.23.10
 
 replace github.com/manuelarte/milogo => ../
 
