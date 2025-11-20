@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: ["1.21", "1.22", "oldstable", "stable"]
+        go: ["oldstable", "stable"]
     name: Go ${{ matrix.go }} sample
     steps:
       - uses: actions/checkout@v5
@@ -37,9 +37,9 @@ jobs:
           config: ./.github/.testcoverage.yml
           profile: cover.out
           local-prefix: github.com/manuelarte/milogo
-          ## when token is not specified (value '') this feature is turned off
-          ## in this example badge is created and committed only for main branch
+          ## when a token is not specified (value ''), this feature is turned off
+          ## in this example badge is created and committed only for the main branch
           git-token: ${{ github.ref_name == 'main' && secrets.GITHUB_TOKEN || '' }}
-          ## name of branch where badges are stored
+          ## name of the branch where badges are stored
           ## ideally this should be orphan branch (see below how to create this branch)
           git-branch: badges
