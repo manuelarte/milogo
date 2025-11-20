@@ -8,9 +8,9 @@
 Rest Partial Response (aka Field Selection) Pattern middleware for [Gin](https://gin-gonic.com/).
 This gin middleware allows you to select a subset of fields to be returned from your endpoints.
 
-<img src="logo.png" alt="logo" width="256" height="256"/>
+<img src="logo.png" alt="logo" width="256" height="256" />
 
-e.g. Imagine that you have the following rest endpoint that returns an user with the fields, `id, name, surname, age, address`:
+e.g., Imagine that you have the following rest endpoint that returns a user with the fields, `id, name, surname, age, address`:
 > /users/1
 
 ```json
