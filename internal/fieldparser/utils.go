@@ -1,4 +1,4 @@
-package parser
+package fieldparser
 
 import (
 	"github.com/manuelarte/milogo/pkg/errors"

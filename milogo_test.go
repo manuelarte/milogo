@@ -178,9 +178,9 @@ func TestArrayRoute(t *testing.T) {
 
 			router := setupRouter()
 			router.POST("/array-echo", func(c *gin.Context) {
-				var body []*map[string]any
+				body := make([]*map[string]any, 1)
 
-				body = append(body, &test.body)
+				body[0] = &test.body
 				c.JSON(200, body)
 			})
 

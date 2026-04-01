@@ -1,17 +1,17 @@
 package config
 
-import "github.com/manuelarte/milogo/internal/parser"
+import "github.com/manuelarte/milogo/internal/fieldparser"
 
 type Config struct {
 	QueryParamField string
 	WrapperField    string
-	Parser          parser.Parser
+	Parser          fieldparser.Parser
 }
 
 func DefaultConfig(configOptions ...Option) Config {
 	c := Config{
 		QueryParamField: "fields",
-		Parser:          parser.NewParser(),
+		Parser:          fieldparser.NewParser(),
 	}
 	for _, co := range configOptions {
 		co(&c)
