@@ -1,3 +1,4 @@
+//nolint:revive // errors
 package errors
 
 import (

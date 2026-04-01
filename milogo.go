@@ -8,7 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/manuelarte/milogo/internal/parser"
+	"github.com/manuelarte/milogo/internal/fieldparser"
 	"github.com/manuelarte/milogo/pkg/config"
 )
 
@@ -50,7 +50,7 @@ func Milogo(configOptions ...config.Option) gin.HandlerFunc {
 			}
 
 			if partialResponseFields, errParsing := cfg.Parser.Parse(fields); errParsing == nil &&
-				parser.Filter(wrappedJSONData, partialResponseFields) == nil {
+				fieldparser.Filter(wrappedJSONData, partialResponseFields) == nil {
 				modifiedBody, errMarsh := json.Marshal(jsonBody)
 				if errMarsh == nil {
 					c.Writer = writer.ResponseWriter // Set back to original writer
